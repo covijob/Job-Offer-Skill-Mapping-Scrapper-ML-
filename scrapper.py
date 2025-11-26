@@ -83,11 +83,42 @@ def scrape_search_page(keyword: str, page: int = 1):
     print(f"parse_job_cards rado {len(jobs)} skelbimų '{keyword}' (p.{page})")
     return jobs
 
+# DI generuoti keywords
+KEYWORDS = [
+    # Programavimo
+    "python", "java", "javascript", "c#", "c++", "php", "go", "typescript",
+    "ruby", "rust", "scala", "node", "react", "angular", "vue",
+
+    # Duomenų
+    "data", "analitikas", "duomenų analitikas", "data analyst", "data engineer",
+    "sql", "power bi", "excel", "tableau", "etl", "bi", "dbt", "airflow",
+
+    # DevOps / Cloud
+    "devops", "aws", "azure", "gcp", "cloud", "docker", "kubernetes", "terraform",
+
+    # Quality / Security
+    "testuotojas", "qa", "automation", "cybersecurity", "pentest", "security",
+
+    # Kitos IT pozicijos
+    "sistemų administratorius", "it administratorius", "backend", "frontend",
+    "fullstack", "support", "helpdesk", "sysadmin"
+]
+
 
 if __name__ == "__main__":
-   #raktazodziai
-    jobs = scrape_search_page("analitikas", page=1)
+    all_jobs = []
 
-    print("\nPirmi 10 rezultatų:")
-    for job in jobs[:10]:
-        print(job["title"], "->", job["url"])
+    for kw in KEYWORDS:
+        print(f"\n--- Ieškomi skelbimai pagal raktinį žodį: {kw} ---")
+        jobs = scrape_search_page(keyword=kw, page=1)
+
+        for job in jobs:
+            job["keyword"] = kw
+            all_jobs.append(job)
+
+    print(f"\nIš viso surinkta skelbimų: {len(all_jobs)}")
+
+    # Parodome pirmus 20
+    for j in all_jobs[:20]:
+        print(j["keyword"], " | ", j["title"], "->", j["url"])
+
