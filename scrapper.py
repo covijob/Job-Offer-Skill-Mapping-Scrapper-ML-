@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlencode
+import pandas
+import csv
+import os
 
 
 BASE_URL = "https://www.cvbankas.lt/"
@@ -106,7 +109,7 @@ KEYWORDS = [
 
 
 if __name__ == "__main__":
-    all_jobs = []
+    all_jobs = [] #pildomas sarasas
 
     for kw in KEYWORDS:
         print(f"\n--- Ieškomi skelbimai pagal raktinį žodį: {kw} ---")
@@ -122,3 +125,10 @@ if __name__ == "__main__":
     for j in all_jobs[:20]:
         print(j["keyword"], " | ", j["title"], "->", j["url"])
 
+
+    with open('CVB_IT.csv', 'w', newline='',encoding='utf-8-sig') as file:
+        writer = csv.DictWriter(file, fieldnames=['keyword', 'title', 'url'])
+        writer.writeheader()
+        writer.writerows(all_jobs)
+
+    print(f"Duomenys išsaugoti: {file}.")
