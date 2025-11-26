@@ -23,17 +23,16 @@ def fetch_html(url: str) -> str:
 
 # istraukia pag. teksta
 def parse_description(html: str) -> str:
-
     soup = BeautifulSoup(html, "html.parser")
 
-    el = soup.select_one(".jobad_txt")
-    if not el:
-        el = soup.select_one(".jobad_desc")
-    if not el:
-        body = soup.find("body")
-        return body.get_text(" ", strip=True) if body else ""
+    blocks = soup.select(".jobad_txt")
 
-    return el.get_text(" ", strip=True)
+    if blocks:
+        text = " ".join(b.get_text(" ", strip=True) for b in blocks)
+        return text
+
+    body = soup.find("body")
+    return body.get_text(" ", strip=True) if body else ""
 
 
 def load_rows_from_csv(path: str):
@@ -71,7 +70,7 @@ def main():
                 f"| desc_len={len(desc)}"
             )
 
-            time.sleep(0.5)  # kad nespaustum per greitai serverio
+            time.sleep(0.12)  # kad nespaustum per greitai serverio
 
     print(f"\nBaigta. Parašyta {written} JSONL eilučių į:\n{output_jsonl}")
 
