@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 import os
 
-
+# Apdorojamas csv failas, istrinami pasikartojantys url, del spartos
 
 spark = SparkSession.builder.appName("RetailCSV").getOrCreate()
 
